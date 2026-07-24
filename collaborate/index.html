@@ -52,7 +52,7 @@
       <div>
         <span class="strip-label">Game website</span>
         <strong>Push to <code>master</code></strong>
-        <small>Checks run first, then GitHub Pages publishes</small>
+        <small>Checks run first, then the website and multiplayer server publish</small>
       </div>
       <span class="strip-arrow" aria-hidden="true">→</span>
       <div>
@@ -87,7 +87,7 @@
         <article><span>01</span><h3>Repository</h3><p>The project folder plus its complete change history.</p></article>
         <article><span>02</span><h3>Commit</h3><p>A named snapshot saved on your computer.</p></article>
         <article><span>03</span><h3>Pull</h3><p>Download Benson’s newest work before you start.</p></article>
-        <article><span>04</span><h3>Push</h3><p>Upload your commits. A push to <code>master</code> publishes the site.</p></article>
+        <article><span>04</span><h3>Push</h3><p>Upload your commits. A push to <code>master</code> publishes the game.</p></article>
         <article><span>05</span><h3>Deploy</h3><p>Make a version live for players.</p></article>
       </div>
       <p class="master-rule"><strong><code>master</code> is the live lane.</strong> Treat every push like a production release. Never force-push.</p>
@@ -247,12 +247,11 @@ the complete Lastlight GitHub Actions check suite, and review the final diff.
 
 Never force-push, discard work, or touch other project folders. Stop on a
 conflict, a check you cannot fix, or an unexpected change you do not understand.
-If the task would change worker/**, stop before editing and tell me that it is
-multiplayer server work for Benson to handle.
 
 When everything is green, make one focused commit, synchronize with the newest
-origin/master, push directly to master, watch Lastlight Checks and GitHub Pages,
-and verify the live game.</code></pre>
+origin/master, push directly to master, watch every Lastlight deployment, and
+verify the live game. If the change affects multiplayer, test it with at least
+two local game windows before pushing.</code></pre>
             </div>
           </article>
 
@@ -264,8 +263,8 @@ and verify the live game.</code></pre>
               <span><strong>Personally verify the live change</strong><small>Claude should watch the automated checks, but you should still open the game and confirm the change works.</small></span>
             </label>
             <div class="verify-grid">
-              <a href="https://github.com/benson/lastlight/actions/workflows/lastlight.yml" target="_blank" rel="noreferrer"><span>01</span><strong>Lastlight Checks</strong><small>Wait for success ↗</small></a>
-              <a href="https://github.com/benson/lastlight/deployments" target="_blank" rel="noreferrer"><span>02</span><strong>Pages deployment</strong><small>Wait for success ↗</small></a>
+              <a href="https://github.com/benson/lastlight/actions/workflows/lastlight.yml" target="_blank" rel="noreferrer"><span>01</span><strong>Checks and deployments</strong><small>Wait for every job to succeed ↗</small></a>
+              <a href="https://github.com/benson/lastlight/deployments" target="_blank" rel="noreferrer"><span>02</span><strong>Website deployment</strong><small>Confirm it is active ↗</small></a>
               <a href="../" target="_blank"><span>03</span><strong>Live game</strong><small>Ctrl+F5 and test ↗</small></a>
             </div>
           </article>

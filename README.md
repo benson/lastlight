@@ -12,7 +12,9 @@ Serve the repository root over HTTP, then open `/`. Solo requires no backend.
 
 Multiplayer uses a small Cloudflare-hosted server in `worker/` to connect
 players in the same room. Single-player and ordinary website changes do not
-need it. Benson owns its production deployment.
+need it. Changes to the multiplayer server are tested and deployed by the same
+GitHub Actions workflow as the website, so collaborators do not need separate
+Cloudflare access.
 
 For local multiplayer testing, run that server and open the frontend with the
 local server override:
@@ -67,5 +69,5 @@ and elite/apex participation count. Telemetry receives aggregate totals only.
 - `npm test --prefix worker`
 
 The GitHub Actions workflow also verifies deterministic sprite and motion
-atlases, fixture reports, the multiplayer soak, and the multiplayer server before production
-deployment.
+atlases, fixture reports, the multiplayer soak, and the multiplayer server
+before deploying both the website and multiplayer server.
