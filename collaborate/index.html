@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="A beginner-friendly Windows guide for collaborating on Lastlight with GitHub, Claude Code, GitHub Pages, and Cloudflare.">
+  <meta name="description" content="A beginner-friendly Windows guide for collaborating on Lastlight with GitHub and Claude Code.">
   <link rel="canonical" href="https://bensonperry.com/lastlight/collaborate/">
   <meta property="og:title" content="Lastlight collaboration setup">
   <meta property="og:description" content="Windows setup instructions for collaborating on Lastlight with GitHub and Claude Code.">
@@ -60,12 +60,6 @@
         <strong>bensonperry.com/lastlight</strong>
         <small>Hard-refresh after deployment</small>
       </div>
-      <span class="strip-arrow" aria-hidden="true">+</span>
-      <div>
-        <span class="strip-label">Multiplayer relay</span>
-        <strong>Deploy only when changed</strong>
-        <small>Cloudflare is a separate release</small>
-      </div>
     </section>
 
     <section id="map" class="map-section section-shell" aria-labelledby="map-title">
@@ -80,8 +74,7 @@
         <li><a href="#clone"><span>03</span><strong>First clone</strong><small>Ask Claude to download it</small></a></li>
         <li><a href="#local"><span>04</span><strong>Local run</strong><small>Ask Claude to start it</small></a></li>
         <li><a href="#daily"><span>05</span><strong>Daily loop</strong><small>Give Claude the task</small></a></li>
-        <li><a href="#relay"><span>06</span><strong>Relay</strong><small>Claude handles when needed</small></a></li>
-        <li><a href="#recovery"><span>07</span><strong>Recovery</strong><small>Give Claude the error</small></a></li>
+        <li><a href="#recovery"><span>06</span><strong>Recovery</strong><small>Give Claude the error</small></a></li>
       </ol>
     </section>
 
@@ -113,8 +106,7 @@
           <a href="#clone"><span>03</span> First clone</a>
           <a href="#local"><span>04</span> Local test</a>
           <a href="#daily"><span>05</span> Change &amp; ship</a>
-          <a href="#relay"><span>06</span> Relay deploy</a>
-          <a href="#recovery"><span>07</span> Recovery</a>
+          <a href="#recovery"><span>06</span> Recovery</a>
         </nav>
       </aside>
 
@@ -149,18 +141,6 @@
               <li>Save the recovery codes in your password manager.</li>
             </ol>
             <p class="safety-note">Never send Benson your password, authenticator codes, or recovery codes.</p>
-          </article>
-
-          <article class="step-card">
-            <label class="check-row">
-              <input type="checkbox" data-check="cloudflare-account">
-              <span><strong>Create a Cloudflare account</strong><small>Only needed to release multiplayer relay changes.</small></span>
-            </label>
-            <ol>
-              <li>Open <a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noreferrer">Cloudflare sign-up <span aria-hidden="true">↗</span></a>.</li>
-              <li>Create and verify the account.</li>
-              <li>Send Benson the account email. Don’t create a Worker.</li>
-            </ol>
           </article>
         </section>
 
@@ -220,18 +200,6 @@ Show me a short final summary of what you verified.</code></pre>
               <span><strong>Claude confirmed <code>master</code> is clean and up to date</strong><small>The project should be inside your Windows Projects folder.</small></span>
             </label>
           </article>
-
-          <article class="step-card">
-            <h3>Connect Cloudflare when Benson has invited you</h3>
-            <p>This is only needed if you will change the multiplayer relay. Paste this to Claude and complete the browser sign-in yourself.</p>
-            <div class="code-block">
-              <button class="copy-button" type="button">Copy prompt</button>
-              <pre><code>Please connect this Lastlight project to Cloudflare using my own Cloudflare
-account. Use the repository's existing Wrangler setup. Pause for me to complete
-the browser sign-in, do not ask for credentials in chat, and verify the login.
-Do not create, change, or deploy a Worker.</code></pre>
-            </div>
-          </article>
         </section>
 
         <section id="local" class="guide-section" data-section="local" aria-labelledby="local-title">
@@ -246,10 +214,10 @@ Do not create, change, or deploy a Worker.</code></pre>
               <button class="copy-button" type="button">Copy prompt</button>
               <pre><code>Please run my local Lastlight setup without changing any files.
 
-Start the website and the local multiplayer relay using the repository's
-documented commands. Keep both processes running and give me clickable links
-for the normal local game and local multiplayer game. Check the terminal output
-for errors. After I finish testing, stop both processes cleanly.</code></pre>
+Start the website using the repository's documented command and give me a
+clickable link. If this change involves multiplayer, also start the local
+multiplayer test server and give me that link. Check the terminal output for
+errors. After I finish testing, stop everything cleanly.</code></pre>
             </div>
             <label class="check-row">
               <input type="checkbox" data-check="local-run">
@@ -279,11 +247,12 @@ the complete Lastlight GitHub Actions check suite, and review the final diff.
 
 Never force-push, discard work, or touch other project folders. Stop on a
 conflict, a check you cannot fix, or an unexpected change you do not understand.
+If the task would change worker/**, stop before editing and tell me that it is
+multiplayer server work for Benson to handle.
 
 When everything is green, make one focused commit, synchronize with the newest
 origin/master, push directly to master, watch Lastlight Checks and GitHub Pages,
-and verify the live game. If worker/** changed, test and deploy the
-Cloudflare relay separately, report its version, and verify /health.</code></pre>
+and verify the live game.</code></pre>
             </div>
           </article>
 
@@ -302,36 +271,9 @@ Cloudflare relay separately, report its version, and verify /health.</code></pre
           </article>
         </section>
 
-        <section id="relay" class="guide-section" data-section="relay" aria-labelledby="relay-title">
-          <header class="guide-section-header">
-            <span class="section-number">06</span>
-            <div><p class="role-tag relay">Usually handled by Claude</p><h2 id="relay-title">Deploy the multiplayer relay</h2></div>
-          </header>
-
-          <article class="step-card">
-            <p>The daily prompt already tells Claude to deploy the relay when worker code changes. If Claude stops before doing that, paste this follow-up. If worker code did not change, skip this section.</p>
-            <div class="code-block">
-              <button class="copy-button" type="button">Copy prompt</button>
-              <pre><code>Finish the multiplayer relay part of this Lastlight release.
-
-First confirm whether anything under worker/** changed in the commit.
-If not, do not deploy. If it did change, run the worker tests, deploy the
-existing Cloudflare Worker, record the deployment version, verify the production
-health and config endpoints, and test a real live lobby.
-
-Do not change Cloudflare settings or secrets. Give me a concise final report
-with the commit, deployment version, checks, and live verification.</code></pre>
-            </div>
-            <label class="check-row">
-              <input type="checkbox" data-check="relay-verify">
-              <span><strong>Claude verified the production relay and I tested a live lobby</strong><small>Save Claude’s final report and send it to Benson.</small></span>
-            </label>
-          </article>
-        </section>
-
         <section id="recovery" class="guide-section" data-section="recovery" aria-labelledby="recovery-title">
           <header class="guide-section-header">
-            <span class="section-number">07</span>
+            <span class="section-number">06</span>
             <div><p class="role-tag recovery">Paste this to Claude</p><h2 id="recovery-title">Recover safely</h2></div>
           </header>
 
@@ -347,9 +289,8 @@ work and explain the safest recovery plan in plain language.
 
 Never force-push, use git reset --hard, delete unfamiliar files, expose secrets,
 or touch anything outside this repository. If a bad website commit is already live,
-use a new revert commit rather than rewriting history. If a bad relay deployment
-is live, show me the rollback plan and ask before executing it. Rerun the full
-Lastlight checks after any fix and verify production afterward.</code></pre>
+use a new revert commit rather than rewriting history. Rerun the full Lastlight
+checks after any fix and verify production afterward.</code></pre>
           </div>
 
           <p class="never-banner"><strong>The two never-commands:</strong> never force-push shared <code>master</code>, and never use <code>git reset --hard</code> to solve a collaboration problem.</p>

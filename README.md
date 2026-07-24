@@ -10,8 +10,12 @@ The production game is published from this repository at
 
 Serve the repository root over HTTP, then open `/`. Solo requires no backend.
 
-For multiplayer, run the Durable Object relay in `worker` and open the frontend
-with the local relay override:
+Multiplayer uses a small Cloudflare-hosted server in `worker/` to connect
+players in the same room. Single-player and ordinary website changes do not
+need it. Benson owns its production deployment.
+
+For local multiplayer testing, run that server and open the frontend with the
+local server override:
 
 ```text
 http://localhost:4173/?relay=ws://localhost:8787/room/
@@ -31,7 +35,7 @@ unknown versions rather than silently running them with current values.
 
 ## Runtime rollback controls
 
-The browser loads a strict, identity-free runtime config from the relay before
+The browser loads a strict, identity-free runtime config from the multiplayer server before
 deployment. Operator controls, emergency procedures, and the complete allowlist
 are documented in `worker/FEATURE-FLAGS.md`.
 
@@ -63,5 +67,5 @@ and elite/apex participation count. Telemetry receives aggregate totals only.
 - `npm test --prefix worker`
 
 The GitHub Actions workflow also verifies deterministic sprite and motion
-atlases, fixture reports, the multiplayer soak, and the relay before production
+atlases, fixture reports, the multiplayer soak, and the multiplayer server before production
 deployment.

@@ -42,9 +42,9 @@ jobs:
         run: npm run fixtures:verify -- --report=artifacts/fixture-report.json
       - name: Four-player deterministic soak gate
         run: npm run soak:ci -- --report artifacts/multiplayer-soak.json
-      - name: Install relay test dependencies
+      - name: Install multiplayer server test dependencies
         run: npm ci --prefix worker
-      - name: Relay tests
+      - name: Multiplayer server tests
         run: npm test --prefix worker
       - name: Upload deterministic reports
         if: always()
