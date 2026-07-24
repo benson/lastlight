@@ -16,7 +16,7 @@ prints the first different canonical field as well as the expected and actual ha
 Run the same short gate used by CI:
 
 ```powershell
-npm --prefix lastlight run soak:ci
+npm run soak:ci
 ```
 
 CI also writes `artifacts/multiplayer-soak.json` and uploads it beside the deterministic
@@ -41,7 +41,7 @@ recorded as advisory data and never used as pass/fail thresholds.
 Run eight full deterministic scenarios with successive seeds and save a report:
 
 ```powershell
-npm --prefix lastlight run soak:extended
+npm run soak:extended
 ```
 
 For a custom count (maximum 50):
