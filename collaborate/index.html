@@ -52,7 +52,7 @@
       <div>
         <span class="strip-label">Game website</span>
         <strong>Push to <code>master</code></strong>
-        <small>GitHub Pages publishes automatically</small>
+        <small>Checks run first, then GitHub Pages publishes</small>
       </div>
       <span class="strip-arrow" aria-hidden="true">→</span>
       <div>
@@ -206,7 +206,7 @@ that every tool and the GitHub login work.</code></pre>
               <button class="copy-button" type="button">Copy prompt</button>
               <pre><code>Please set up my local copy of Lastlight.
 
-Clone https://github.com/benson/benson.github.io.git into my Windows Projects
+Clone https://github.com/benson/lastlight.git into my Windows Projects
 folder, unless it already exists. Work only with this repository. Confirm that
 I have collaborator access, that the current branch is master, and that the
 working tree is clean and synchronized with origin/master.
@@ -269,7 +269,7 @@ for errors. After I finish testing, stop both processes cleanly.</code></pre>
             <div class="code-block">
               <button class="copy-button" type="button">Copy prompt</button>
               <pre><code>I am Jacob, working under Benson's standing authorization to make this
-Lastlight change directly on master. Work only inside lastlight/**.
+Lastlight change directly on master. Work only inside this repository.
 
 Task: [DESCRIBE THE CHANGE AND WHAT “DONE” LOOKS LIKE]
 
@@ -278,11 +278,11 @@ origin/master is pulled with --ff-only. Implement and test the change, run
 the complete Lastlight GitHub Actions check suite, and review the final diff.
 
 Never force-push, discard work, or touch other project folders. Stop on a
-conflict, a check you cannot fix, or an unexpected file outside lastlight/**.
+conflict, a check you cannot fix, or an unexpected change you do not understand.
 
 When everything is green, make one focused commit, synchronize with the newest
 origin/master, push directly to master, watch Lastlight Checks and GitHub Pages,
-and verify the live game. If lastlight/worker/** changed, test and deploy the
+and verify the live game. If worker/** changed, test and deploy the
 Cloudflare relay separately, report its version, and verify /health.</code></pre>
             </div>
           </article>
@@ -295,8 +295,8 @@ Cloudflare relay separately, report its version, and verify /health.</code></pre
               <span><strong>Personally verify the live change</strong><small>Claude should watch the automated checks, but you should still open the game and confirm the change works.</small></span>
             </label>
             <div class="verify-grid">
-              <a href="https://github.com/benson/benson.github.io/actions/workflows/lastlight-check.yml" target="_blank" rel="noreferrer"><span>01</span><strong>Lastlight Checks</strong><small>Wait for success ↗</small></a>
-              <a href="https://github.com/benson/benson.github.io/deployments" target="_blank" rel="noreferrer"><span>02</span><strong>Pages deployment</strong><small>Wait for success ↗</small></a>
+              <a href="https://github.com/benson/lastlight/actions/workflows/lastlight.yml" target="_blank" rel="noreferrer"><span>01</span><strong>Lastlight Checks</strong><small>Wait for success ↗</small></a>
+              <a href="https://github.com/benson/lastlight/deployments" target="_blank" rel="noreferrer"><span>02</span><strong>Pages deployment</strong><small>Wait for success ↗</small></a>
               <a href="../" target="_blank"><span>03</span><strong>Live game</strong><small>Ctrl+F5 and test ↗</small></a>
             </div>
           </article>
@@ -314,7 +314,7 @@ Cloudflare relay separately, report its version, and verify /health.</code></pre
               <button class="copy-button" type="button">Copy prompt</button>
               <pre><code>Finish the multiplayer relay part of this Lastlight release.
 
-First confirm whether anything under lastlight/worker/** changed in the commit.
+First confirm whether anything under worker/** changed in the commit.
 If not, do not deploy. If it did change, run the worker tests, deploy the
 existing Cloudflare Worker, record the deployment version, verify the production
 health and config endpoints, and test a real live lobby.
@@ -346,7 +346,7 @@ Diagnose the current state before changing anything. Preserve all uncommitted
 work and explain the safest recovery plan in plain language.
 
 Never force-push, use git reset --hard, delete unfamiliar files, expose secrets,
-or touch anything outside lastlight/**. If a bad website commit is already live,
+or touch anything outside this repository. If a bad website commit is already live,
 use a new revert commit rather than rewriting history. If a bad relay deployment
 is live, show me the rollback plan and ask before executing it. Rerun the full
 Lastlight checks after any fix and verify production afterward.</code></pre>
@@ -364,7 +364,7 @@ Lastlight checks after any fix and verify production afterward.</code></pre>
       <span>LASTLIGHT</span>
     </a>
     <p>Lastlight collaboration guide.</p>
-    <a href="https://github.com/benson/benson.github.io" target="_blank" rel="noreferrer">View repository ↗</a>
+    <a href="https://github.com/benson/lastlight" target="_blank" rel="noreferrer">View repository ↗</a>
   </footer>
 
   <div id="copy-toast" class="copy-toast" role="status" aria-live="polite">Copied</div>

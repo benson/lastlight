@@ -6,7 +6,7 @@ import { LASTLIGHT_ENVIRONMENT_CHUNKS, validateEnvironmentChunks } from "../envi
 /**
  * The canonical asset contract for a Lastlight visual theme.
  *
- * Asset paths are relative to lastlight/index.html. A replacement theme keeps
+ * Asset paths are relative to index.html. A replacement theme keeps
  * these logical keys and swaps only the values, so game data never needs to
  * know which art direction is active.
  */

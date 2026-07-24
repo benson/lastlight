@@ -2,14 +2,19 @@
 
 Lastlight is a free 1–4 player browser bullet-heaven prototype with original characters, artwork, maps, enemies, upgrades, and events.
 
+The production game is published from this repository at
+[bensonperry.com/lastlight](https://bensonperry.com/lastlight/). A push to
+`master` runs the complete test suite and deploys only after every check passes.
+
 ## Local use
 
-Serve the repository root over HTTP, then open `/lastlight/`. Solo requires no backend.
+Serve the repository root over HTTP, then open `/`. Solo requires no backend.
 
-For multiplayer, run the Durable Object relay in `lastlight/worker` and open the frontend with the local relay override:
+For multiplayer, run the Durable Object relay in `worker` and open the frontend
+with the local relay override:
 
 ```text
-http://localhost:4173/lastlight/?relay=ws://localhost:8787/room/
+http://localhost:4173/?relay=ws://localhost:8787/room/
 ```
 
 ## Balance contract
@@ -53,6 +58,10 @@ and elite/apex participation count. Telemetry receives aggregate totals only.
 
 ## Checks
 
-- `npm run check` in `lastlight`
-- `npm test` in `lastlight`
-- `npm test` in `lastlight/worker`
+- `npm run check`
+- `npm test`
+- `npm test --prefix worker`
+
+The GitHub Actions workflow also verifies deterministic sprite and motion
+atlases, fixture reports, the multiplayer soak, and the relay before production
+deployment.

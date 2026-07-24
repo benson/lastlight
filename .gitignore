@@ -1,0 +1,10 @@
+**/.wrangler/
+.claude/
+.env
+.env.*
+.lastlight-dashboard/
+.playwright-cli/
+artifacts/
+node_modules/
+__pycache__/
+*.py[cod]

@@ -13,7 +13,7 @@ contract are theme-owned as well; see `../ENVIRONMENT-CHUNKS.md`.
 1. Copy `lastlight.js` to a new module, preserving the shape of `assets` and all
    logical keys.
 2. Change the theme `id`, display `name`, and asset path values. Paths are
-   relative to `lastlight/index.html`; keeping art under
+   relative to `index.html`; keeping art under
    `assets/themes/<theme-id>/` makes complete art packs easy to move or remove.
 3. Export the new object through `defineTheme(...)`. Validation will fail fast
    when a key is missing, misspelled, or points to the same image as another key.

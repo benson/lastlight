@@ -19,8 +19,8 @@ Run the same short gate used by CI:
 npm --prefix lastlight run soak:ci
 ```
 
-CI also writes `lastlight/artifacts/multiplayer-soak.json` and uploads it beside the deterministic
-fixture report. `lastlight/artifacts/` is gitignored.
+CI also writes `artifacts/multiplayer-soak.json` and uploads it beside the deterministic
+fixture report. `artifacts/` is gitignored.
 
 Structural failures gate a release. The default per-replica/run budgets are:
 
@@ -47,7 +47,7 @@ npm --prefix lastlight run soak:extended
 For a custom count (maximum 50):
 
 ```powershell
-node lastlight/soak/run-soak.js --runs 20 --report lastlight/artifacts/multiplayer-soak-20.json
+node soak/run-soak.js --runs 20 --report artifacts/multiplayer-soak-20.json
 ```
 
 ## BEN-809 integration adapters

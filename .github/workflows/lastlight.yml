@@ -1,0 +1,74 @@
+name: Lastlight
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: lastlight-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'production' }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned sprite tooling
+        run: python -m pip install Pillow==12.1.1
+      - name: Syntax checks
+        run: npm run check
+      - name: Deterministic sprite atlas gate
+        run: npm run sprites:verify
+      - name: Normalized motion atlas gate
+        run: npm run motion-atlases:verify
+      - name: Motion atlas segmentation tests
+        run: npm run motion-atlases:test
+      - name: Lastlight tests
+        run: npm test
+      - name: Deterministic fixture gates
+        run: npm run fixtures:verify -- --report=artifacts/fixture-report.json
+      - name: Four-player deterministic soak gate
+        run: npm run soak:ci -- --report artifacts/multiplayer-soak.json
+      - name: Install relay test dependencies
+        run: npm ci --prefix worker
+      - name: Relay tests
+        run: npm test --prefix worker
+      - name: Upload deterministic reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lastlight-deterministic-reports
+          path: |
+            artifacts/fixture-report.json
+            artifacts/multiplayer-soak.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: check
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

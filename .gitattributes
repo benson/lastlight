@@ -1,0 +1,2 @@
+benchmarks/reports/*.json text eol=lf
+benchmarks/reports/*.md text eol=lf

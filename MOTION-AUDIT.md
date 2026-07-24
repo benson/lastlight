@@ -8,7 +8,7 @@ audit's deterministic metadata or decoded-pixel expectations.
 
 ## Commands
 
-Run from `lastlight/` with Python 3.13, Pillow 12.1.1, and Node.js:
+Run from the repository root with Python 3.13, Pillow 12.1.1, and Node.js:
 
 ```bash
 npm run motion-audit:verify

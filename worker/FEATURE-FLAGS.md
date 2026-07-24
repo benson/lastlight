@@ -17,7 +17,7 @@ other player/run identity.
 
 ## Safe rollout
 
-From `lastlight/worker`, prepare the complete one-line JSON value before running:
+From `worker`, prepare the complete one-line JSON value before running:
 
 ```powershell
 npx wrangler secret put LASTLIGHT_RUNTIME_CONFIG

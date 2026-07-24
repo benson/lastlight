@@ -7,7 +7,7 @@ clip timing must change together.
 
 ## Commands
 
-Run from `lastlight/`:
+Run from the repository root:
 
 ```bash
 npm run sprites:verify
@@ -139,7 +139,7 @@ equal the in-memory deterministic rebuild byte for byte.
   physical rows, logical clips, anchors, and sockets;
 - a suite-level `report.json`.
 
-These live under `lastlight/artifacts/`, which is gitignored. They are review
+These live under `artifacts/`, which is gitignored. They are review
 artifacts, not runtime dependencies.
 
 ## Adding a specialist or swapping the full theme
@@ -191,7 +191,7 @@ different physical row count from its runtime contract. Zuri uses this path to
 promote its four-by-five PNG into a four-by-six runtime WebP; every duplicated
 or remapped pose remains explicit in `sourceRows` and in the QA report.
 
-Run from `lastlight/`:
+Run from the repository root:
 
 ```bash
 npm run motion-atlases:verify

@@ -9,7 +9,7 @@ development context.
 Browser activation requires both a named query profile and a trusted context:
 
 ```text
-http://localhost:4173/lastlight/?llNetwork=mobile&llNetworkSeed=playtest-7
+http://localhost:4173/?llNetwork=mobile&llNetworkSeed=playtest-7
 ```
 
 The public production origin rejects the same query string. A development build

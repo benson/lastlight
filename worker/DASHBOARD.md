@@ -30,7 +30,7 @@ root in PowerShell:
 ```powershell
 $env:CLOUDFLARE_ACCOUNT_ID = "<account-id>"
 $env:CLOUDFLARE_API_TOKEN = "<read-only-token>"
-npm run lastlight:dashboard -- --days 30 --min-cohort 5
+npm run dashboard -- --days 30 --min-cohort 5
 Start-Process .lastlight-dashboard/report.html
 ```
 
@@ -41,7 +41,7 @@ into SQL without numeric bounds checks.
 Use this command to inspect the exact query without making a request:
 
 ```powershell
-npm run lastlight:dashboard -- --days 30 --min-cohort 5 --print-sql
+npm run dashboard -- --days 30 --min-cohort 5 --print-sql
 ```
 
 ## Fixture-backed development
@@ -49,7 +49,7 @@ npm run lastlight:dashboard -- --days 30 --min-cohort 5 --print-sql
 Cloudflare access is not required to develop or verify the report:
 
 ```powershell
-npm run lastlight:dashboard -- --fixture scripts/fixtures/lastlight-dashboard-aggregates.json
+npm run dashboard -- --fixture scripts/fixtures/lastlight-dashboard-aggregates.json
 npm test -- --test-name-pattern="dashboard"
 ```
 
