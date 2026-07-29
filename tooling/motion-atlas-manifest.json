@@ -60,9 +60,9 @@
     {
       "id": "nova", "kind": "specialist", "rows": 6,
       "source": { "path": "assets/motion/specialists/nova.webp", "sha256": "42494a088a5b3b5101a6d6fc515eb8c339cad16b95560ec592317c24aac2b312", "width": 1024, "height": 1536 },
-      "output": { "path": "assets/motion-normalized/specialists/nova-v2.webp", "pixelSha256": "2462e2a0e06b4919f943569d6a3aa7bd1e687a035739f642aaf75fcc9c0b62a9", "width": 1024, "height": 1536 },
+      "output": { "path": "assets/motion-normalized/specialists/nova-v2.webp", "pixelSha256": "4f058520fc5e9c2e5d2631557820a6e015d3a1b8e60d55977b48612fdaf60b54", "width": 1024, "height": 1536 },
       "sourceSlots": [[0,1,2,3], [0,1,2,3], [0,1,2,3], [0,1,2,3], [0,1,2,3], [0,1,2,3]],
-      "sourceRows": {}, "flipX": ["run-a.west", "run-b.west", "action.west", "hurt-down.west"],
+      "sourceRows": {}, "flipX": ["idle-a.west", "idle-b.west", "run-a.west", "run-b.west", "action.west", "hurt-down.west"],
       "directions": ["south", "west", "north", "east"], "states": ["idle-a", "idle-b", "run-a", "run-b", "action", "hurt-down"], "anchor": [0.5, 0.875]
     },
     {

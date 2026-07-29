@@ -187,7 +187,7 @@ class MotionAtlasNormalizationTests(unittest.TestCase):
         nova = atlases["nova"]
         self.assertEqual(nova["output"]["path"], "assets/motion-normalized/specialists/nova-v2.webp")
         self.assertEqual(nova["flipX"], [
-            "run-a.west", "run-b.west", "action.west", "hurt-down.west",
+            "idle-a.west", "idle-b.west", "run-a.west", "run-b.west", "action.west", "hurt-down.west",
         ])
         rift = atlases["rift"]
         self.assertEqual(rift["output"]["path"], "assets/motion-normalized/specialists/rift-v2.webp")
