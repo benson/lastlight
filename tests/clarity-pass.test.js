@@ -39,10 +39,10 @@ test("mastery, upgrade loadout, aligned cards, and explainable results are first
   assert.match(css, /\.result-item-tooltip/);
 });
 
-test("lobby controls stay visible and edge utilities share the right rail", () => {
+test("lobby controls stay visible and build information stays on the right rail", () => {
   assert.match(html, /class="lobby-controls-panel"[\s\S]+class="control-ribbon lobby-controls"/);
   assert.doesNotMatch(html, /<details class="reference-disclosure">[\s\S]+class="control-ribbon lobby-controls"/);
-  assert.match(html, /class="edge-utilities"[\s\S]+id="build-history-button"[\s\S]+id="report-button"/);
+  assert.match(html, /class="edge-utilities"[\s\S]+id="build-history-button"/);
   assert.match(css, /\.detail-art-wrap \{[^}]*min-height: 190px;[^}]*flex: 0 0 clamp/);
 });
 

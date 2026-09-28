@@ -28,11 +28,3 @@ test("late reinforcement campaign clears require bounded pre-apex participation"
   assert.match(game, /campaignJoinEligibility\(\{ activeCombatTicks: Number\(localPlayer\.preApexDeployedTicks/);
   assert.match(game, /Unlock progress not awarded/);
 });
-
-test("feedback screenshots attach by paste without a file-picker surface", () => {
-  assert.doesNotMatch(html, /id="report-image"|type="file"/);
-  assert.match(html, /<strong>Paste a screenshot<\/strong> anywhere while this form is open/);
-  assert.match(game, /addEventListener\("paste", pasteReportImage\)/);
-  assert.match(game, /clipboardData\?\.files/);
-  assert.match(game, /state\.reportImageDataUrl/);
-});

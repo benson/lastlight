@@ -105,7 +105,7 @@ test("lobby selection flows into a restrained, accessible combat launch", () => 
 test("desktop-only type overrides preserve compact controls while result actions stay readable", () => {
   const desktop = css.match(/@media \(min-width: 981px\) \{([\s\S]+?)\n\}/)?.[1] || "";
   assert.match(desktop, /\.control-ribbon \{ font-size: 10px; \}/);
-  for (const selector of [".control-ribbon kbd", ".damage-ledger-handle button", ".guide-tabs a", ".report-button", ".build-badge"]) {
+  for (const selector of [".control-ribbon kbd", ".damage-ledger-handle button", ".guide-tabs a", ".build-badge"]) {
     assert.match(desktop, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   assert.match(css, /\.copy-scorecard \{[^}]+font: 700 12px\/1 var\(--sans\)/s);
@@ -194,23 +194,9 @@ test("upgrade intelligence uses authoritative combat metadata", () => {
   assert.match(css, /\.upgrade-stat-tooltip/);
 });
 
-test("the report hotkey is global but yields to typing and open dialogs", () => {
-  assert.match(game, /from "\.\/hotkeys\.js/);
-  assert.match(game, /if \(isReportShortcut\(event\)\)/);
-  assert.match(game, /shouldOpenReportShortcut\(event, \{ isTyping, dialogOpen \}\)/);
-  assert.match(game, /if \(isTyping \|\| dialogOpen \|\| state\.screen !== "game"\) return/);
-  assert.doesNotMatch(game, /state\.screen !== "game"\) return;\s*const key[\s\S]{0,500}reportKey/);
-  assert.match(game, /const key = String\(event\.key \|\| ""\)\.toLowerCase\(\)/);
-  assert.match(game, /state\.screen === "game" && state\.authorityState === "active" && state\.isHost && state\.sim && !state\.sim\.paused/);
-  assert.match(game, /state\.resumeAfterReport && state\.screen === "game" && state\.isHost && state\.sim\?\.paused && state\.sim\.pauseReason === "manual"/);
-});
-
-test("phone feedback uses a viewport-contained one-column dialog and hides the desktop damage ledger", () => {
+test("phone layout hides the desktop damage ledger", () => {
   const mobile = css.match(/@media \(max-width: 650px\) \{([\s\S]+?)\n\}/)?.[1] || "";
   assert.match(mobile, /\.damage-ledger \{ display: none; \}/);
-  assert.match(mobile, /\.report-dialog \{[^}]+max-height: calc\(100dvh - 8px\);[^}]+overflow-y: auto;/);
-  assert.match(mobile, /\.report-fields, \.report-actions \{ grid-template-columns: 1fr; \}/);
-  assert.match(mobile, /\.report-fields textarea \{ min-height: 112px; resize: none; \}/);
 });
 
 test("relay identity is sent after WebSocket upgrade instead of in the request URL", () => {
@@ -318,13 +304,6 @@ test("a rejoined client adopts the current authority epoch but stays frozen unti
   assert.match(game, /if \(recoveringAuthority\) \{ finishAuthorityRestoration\(\); toast\("Operation restored · run state synchronized"\); \}/);
   assert.match(game, /if \(state\.authorityState === "synchronizing"\) finishAuthorityRestoration\(\)/);
   assert.doesNotMatch(game, /state\.authorityState === "reconnecting"\) setAuthorityState\("active"\)/);
-});
-
-test("feedback diagnostics strip room, relay, token, and network-lab query parameters", () => {
-  assert.match(game, /function reportLocation\(\) \{ return `\$\{location\.origin\}\$\{location\.pathname\}`; \}/);
-  assert.equal((game.match(/url: reportLocation\(\)/g) || []).length, 2);
-  assert.match(game, /route: \{ viewMode: state\.screen, path: location\.pathname, search: ""/);
-  assert.doesNotMatch(game.slice(game.indexOf("function diagnosticText"), game.indexOf("function captureClientError")), /location\.(?:href|search)/);
 });
 
 test("result-screen recovery also waits for an authoritative ended-run sync", () => {

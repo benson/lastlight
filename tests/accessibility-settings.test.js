@@ -23,6 +23,23 @@ test("accessibility settings are strict, complete, immutable, identity-free, and
   assert.deepEqual(normalizeAccessibilitySettings({ arbitrary: true }), defaults);
 });
 
+test("retiring the report binding preserves saved controls and accessibility preferences", () => {
+  const saved = structuredClone(defaultAccessibilitySettings());
+  saved.bindings.report = "KeyQ";
+  saved.bindings.active = "Backquote";
+  saved.textScale = 2;
+  saved.colorVision = "high-contrast";
+  saved.controller.enabled = false;
+  const storage = memoryStorage({ [ACCESSIBILITY_STORAGE_KEY]: JSON.stringify(saved) });
+  const loaded = loadAccessibilitySettings(storage);
+  assert.deepEqual(loaded, { ...saved, bindings: Object.fromEntries(Object.entries(saved.bindings).filter(([action]) => action !== "report")) });
+  assert.equal(keyboardActionForEvent(loaded, { code: "KeyQ" }), null);
+  assert.equal(keyboardActionForEvent(loaded, { code: "Backquote" }), "active");
+  assert.equal(saved.bindings.report, "KeyQ", "normalization must not mutate the saved profile");
+  saveAccessibilitySettings(loaded, storage);
+  assert.equal(Object.hasOwn(JSON.parse(storage.values.get(ACCESSIBILITY_STORAGE_KEY)).bindings, "report"), false);
+});
+
 test("optional local persistence never serializes identity and fails safely", () => {
   const storage = memoryStorage(), saved = saveAccessibilitySettings({ ...structuredClone(defaultAccessibilitySettings()), colorVision: "high-contrast", reducedFlash: true }, storage);
   assert.equal(loadAccessibilitySettings(storage).colorVision, "high-contrast");

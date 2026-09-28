@@ -26,7 +26,7 @@ test("battlefield map mechanics expose shape, pattern, countdown, and inspection
   assert.match(render, /state\.tick \+ pressureAdvanceTicks/);
 });
 
-test("problem reports capture whether a map mechanic is moving the local player", () => {
+test("local diagnostics expose whether a map mechanic is moving the local player", () => {
   assert.match(game, /mapMechanic: mechanic \? \{/);
   assert.match(game, /affectsLocalPlayer: mechanicAffectsPlayer/);
   assert.match(game, /forcedMovementActive: mechanic\.active && mechanicAffectsPlayer && mechanic\.effect\.pushPerSecond > 0/);

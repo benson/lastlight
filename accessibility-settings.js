@@ -2,13 +2,13 @@ export const ACCESSIBILITY_SETTINGS_VERSION = 2;
 export const ACCESSIBILITY_STORAGE_KEY = "lastlight:accessibility:v2";
 
 export const ACCESSIBILITY_ACTIONS = Object.freeze([
-  "moveUp", "moveDown", "moveLeft", "moveRight", "active", "ultimate", "autoAim", "ping", "pause", "quickPause", "inspect", "report",
+  "moveUp", "moveDown", "moveLeft", "moveRight", "active", "ultimate", "autoAim", "ping", "pause", "quickPause", "inspect",
   "choice1", "choice2", "choice3", "reroll", "banish", "skip",
 ]);
 
 export const DEFAULT_ACCESSIBILITY_BINDINGS = Object.freeze({
   moveUp: "KeyW", moveDown: "KeyS", moveLeft: "KeyA", moveRight: "KeyD",
-  active: "KeyE", ultimate: "KeyR", autoAim: "KeyC", ping: "KeyG", pause: "Escape", quickPause: "Space", inspect: "ShiftLeft", report: "Backquote",
+  active: "KeyE", ultimate: "KeyR", autoAim: "KeyC", ping: "KeyG", pause: "Escape", quickPause: "Space", inspect: "ShiftLeft",
   choice1: "Digit1", choice2: "Digit2", choice3: "Digit3", reroll: "Digit4", banish: "Digit5", skip: "Digit0",
 });
 
@@ -59,6 +59,12 @@ export function validateAccessibilitySettings(value) {
 export function normalizeAccessibilitySettings(source, systemReducedMotion = false) {
   const fallback = structuredClone(defaultAccessibilitySettings(systemReducedMotion));
   if (!source || typeof source !== "object" || Array.isArray(source)) return deepFreeze(fallback);
+  // Retire the old report binding without resetting saved controls or display preferences.
+  if ([0, 1, 2].includes(source.version) && Object.hasOwn(source.bindings || {}, "report")) {
+    const bindings = { ...source.bindings };
+    delete bindings.report;
+    source = { ...source, bindings };
+  }
   const migrated = [0, 1].includes(source.version) ? { ...fallback, ...source, version: ACCESSIBILITY_SETTINGS_VERSION, controller: { ...fallback.controller, ...(source.controller || {}) }, bindings: { ...fallback.bindings, ...(source.bindings || {}) } } : source;
   try { return deepFreeze(structuredClone(validateAccessibilitySettings(migrated))); }
   catch { return deepFreeze(fallback); }

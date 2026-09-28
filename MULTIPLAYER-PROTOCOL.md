@@ -270,7 +270,7 @@ clock time or transport sequence values. Migration restores the anonymous
 replay draft at the checkpoint tick so final verification continues across the
 authority change.
 
-Problem-report diagnostics expose aggregate epoch, acknowledgement, rejection,
+Local QA diagnostics expose aggregate epoch, acknowledgement, rejection,
 queue, and migration status only. They do not include message bodies, room
 codes, callsigns, resume tokens, transient peer identifiers, or the checkpoint
 payload.

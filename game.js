@@ -15,7 +15,7 @@ import { QUALITY_STORAGE_KEY, loadQualitySettings, saveQualitySettings, settings
 import {
   ACCESSIBILITY_ACTIONS, GAMEPAD_ACTIONS, bindingLabel, defaultAccessibilitySettings,
   keyboardActionForEvent, loadAccessibilitySettings, readStandardGamepad, saveAccessibilitySettings,
-} from "./accessibility-settings.js?v=20260718.9";
+} from "./accessibility-settings.js?v=20260928.1";
 import { RECOVERY_SIMULATION_VERSION, clearRunRecovery, createRunRecovery, loadRunRecovery, runtimeRecoveryIdentity, saveRunRecovery } from "./recovery.js?v=20260718.9";
 import { GuestInputSequenceTracker, HostInputSequenceGate, createDraftActionMessage, createSnapshotMessage, sanitizeDraftActionMessage, sanitizeSnapshotMessage } from "./protocol.js?v=20260713.2";
 import { createActivatedNetworkLab, resolveNetworkLabActivation } from "./network-lab.js?v=20260713.2";
@@ -35,7 +35,7 @@ import { playFeedbackHaptics } from "./feedback-haptics.js?v=20260718.9";
 import { buildUpgradeComparison, forecastDraftChoice, playerBuildStats, signatureEvolutionTelemetry, weaponTelemetry } from "./upgrade-preview.js?v=20260718.9";
 import { BUILDCRAFT_CATEGORY_DEFINITIONS, passiveBuildcraft, sourceBuildcraft } from "./synergy-tags.js?v=20260718.9";
 import { getWeaponEvolution } from "./weapon-evolution.js?v=20260713.1";
-import { isFpsShortcut, isReportShortcut, shouldOpenReportShortcut } from "./hotkeys.js?v=20260718.9";
+import { isFpsShortcut } from "./hotkeys.js?v=20260928.1";
 import { VerifiedReplayTimeline } from "./replay-timeline.js?v=20260718.9";
 import { createGameReplayAdapters } from "./replay-game-adapters.js?v=20260718.9";
 import { SPECIALIST_IDENTITY_VERSION, getSpecialistIdentity } from "./specialist-identity.js?v=20260718.9";
@@ -97,7 +97,6 @@ const query = new URLSearchParams(location.search);
 const localHost = ["localhost", "127.0.0.1"].includes(location.hostname);
 const RELAY_BASE = query.get("relay") || (localHost ? "ws://localhost:8787/room/" : "wss://lastlight-relay.bensonperry.workers.dev/room/");
 const RUNTIME_CONFIG_ENDPOINT = runtimeConfigEndpoint(RELAY_BASE);
-const FEEDBACK_URL = "https://biblioplex-api.bensonperry.com/feedback";
 const BUILD = "2026.07.18.9";
 const AUTHORITY_WATCHDOG_MS = Object.freeze({ synchronizing: 10_000, migrating: 25_000 });
 const BALANCE = getBalanceConfig();
@@ -209,7 +208,7 @@ const state = {
   audioStatus: audioOutputState({ supported: audioSupported, enabled: initialAudioSettings.enabled }),
   audioContext: null, audioMixer: null, audioSamples: null, musicDirector: null, audioUnlockInFlight: null, audioUnlockAttempts: 0, audioUnlockReason: "startup", audioLastError: "", activeAudioNodes: 0, peakAudioNodes: 0, toastTimer: null,
   soundState: emptySoundState(),
-  recentErrors: [], reportSubmitting: false, resumeAfterReport: false, reportImageDataUrl: "", reportImageMimeType: "", reportImageName: "", telemetrySent: false,
+  telemetrySent: false,
   qualitySettings: initialQualitySettings, accessibilitySettings: initialAccessibilitySettings, accessibilityCapture: "", showEnemyHealthBars: initialQualitySettings.healthBars !== "off", inspectPointer: null, inspectActive: false,
   performanceMetrics: null, lastDamageLedgerKey: "", lastFpsUpdate: 0,
   damageLedgerCollapsed: loadDamageLedgerCollapsed(),
@@ -317,7 +316,7 @@ function setAuthorityState(next, detail = {}) {
     if (name === "game" || name === "result") screen.setAttribute("aria-busy", blocked ? "true" : "false");
   }
   $("game-canvas").setAttribute("aria-disabled", visible && state.screen === "game" ? "true" : "false");
-  for (const id of ["report-button", "build-history-button"]) $(id).inert = visible;
+  $("build-history-button").inert = visible;
   const presentation = authorityStateCopy(next, detail);
   $("network-state-mark").textContent = presentation.mark;
   $("network-state-title").textContent = presentation.title;
@@ -1972,7 +1971,7 @@ const ACCESSIBILITY_FIELD_IDS = Object.freeze({
 const ACCESSIBILITY_ACTION_LABELS = Object.freeze({
   moveUp: "Move up", moveDown: "Move down", moveLeft: "Move left", moveRight: "Move right", active: "Active ability",
   ultimate: "Ultimate ability", autoAim: "Toggle signature aim", ping: "Contextual ping", pause: "Menu pause", quickPause: "Quick Pause", inspect: "Inspect field",
-  report: "Open report", choice1: "Draft choice 1", choice2: "Draft choice 2", choice3: "Draft choice 3",
+  choice1: "Draft choice 1", choice2: "Draft choice 2", choice3: "Draft choice 3",
   reroll: "Reroll draft", banish: "Banish draft choice", skip: "Skip draft",
 });
 
@@ -2078,7 +2077,6 @@ function performMappedAction(action) {
   else if (action === "ping") openPingWheel({ source: "keyboard" });
   else if (action === "pause") togglePause();
   else if (action === "quickPause") toggleQuickPause();
-  else if (action === "report") openReport();
   else return false;
   return true;
 }
@@ -3842,124 +3840,9 @@ function gameDiagnostics() {
   };
 }
 
-function reportLocation() { return `${location.origin}${location.pathname}`; }
-
-function diagnosticText() {
-  return JSON.stringify({
-    capturedAt: new Date().toISOString(),
-    url: reportLocation(),
-    game: gameDiagnostics(),
-    viewport: { width: innerWidth, height: innerHeight, devicePixelRatio },
-    userAgent: navigator.userAgent,
-    recentErrors: state.recentErrors,
-  }, null, 2);
-}
-
 function captureClientError(type, value) {
   const error = value instanceof Error ? value : new Error(String(value?.message || value || "Unknown client error"));
-  state.recentErrors.push({ type: String(type).slice(0, 40), summary: `${error.message}${error.stack ? `\n${error.stack}` : ""}`.slice(0, 1200) });
-  state.recentErrors = state.recentErrors.slice(-6);
-  $("report-alert")?.classList.remove("hidden");
-  if (state.recentErrors.length === 1) toast("Something went wrong · report details are ready");
-}
-
-function clearReportNote() { $("report-note").value = ""; }
-
-function clearReportImage() {
-  state.reportImageDataUrl = ""; state.reportImageMimeType = ""; state.reportImageName = "";
-  $("report-image-status").innerHTML = "<strong>Paste a screenshot</strong> anywhere while this form is open. It will attach automatically.";
-  $("report-image-status").className = "";
-}
-
-async function attachReportImage(file) {
-  if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type)) { $("report-image-status").textContent = "Choose a PNG, JPEG, or WebP screenshot."; $("report-image-status").className = "error"; return; }
-  if (file.size > 5_000_000) { $("report-image-status").textContent = "That screenshot is over 5 MB. Please crop or compress it first."; $("report-image-status").className = "error"; return; }
-  try {
-    const dataUrl = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || "")); reader.onerror = () => reject(reader.error || new Error("Screenshot could not be read"));
-      reader.readAsDataURL(file);
-    });
-    state.reportImageDataUrl = dataUrl; state.reportImageMimeType = file.type; state.reportImageName = file.name || "pasted screenshot";
-    $("report-image-status").textContent = `${state.reportImageName} attached · ${(file.size / 1_000_000).toFixed(1)} MB`;
-    $("report-image-status").className = "success";
-  } catch { $("report-image-status").textContent = "That screenshot could not be attached."; $("report-image-status").className = "error"; }
-}
-
-function pasteReportImage(event) {
-  const file = [...(event.clipboardData?.files || [])].find((entry) => entry.type.startsWith("image/"));
-  if (!file) return;
-  event.preventDefault(); attachReportImage(file);
-}
-
-function openReport() {
-  closePingWheel({ restoreFocus: false });
-  const game = gameDiagnostics();
-  clearReportNote(); clearReportImage();
-  state.resumeAfterReport = false;
-  if (state.screen === "game" && state.authorityState === "active" && state.isHost && state.sim && !state.sim.paused) { togglePause(true); state.resumeAfterReport = true; }
-  $("report-context").textContent = `BUILD ${BUILD} · ${game.screen.toUpperCase()} · ${game.map || "NO MAP"} / ${game.difficulty || "NO TIER"} · ${game.multiplayerRole.toUpperCase()} · ${state.recentErrors.length} RECENT ERROR${state.recentErrors.length === 1 ? "" : "S"}`;
-  $("report-status").textContent = ""; $("report-status").className = "report-status";
-  $("report-screenshot").disabled = state.screen !== "game";
-  $("report-dialog").showModal();
-  setTimeout(() => $("report-note").focus(), 50);
-}
-
-function handleReportClosed() {
-  clearReportNote();
-  if (state.resumeAfterReport && state.screen === "game" && state.isHost && state.sim?.paused && state.sim.pauseReason === "manual") togglePause(false);
-  state.resumeAfterReport = false;
-}
-
-function handleReportSubmitShortcut(event) {
-  if (event.key !== "Enter" || !event.shiftKey || event.isComposing) return;
-  event.preventDefault();
-  if (!state.reportSubmitting) event.currentTarget.requestSubmit($("report-submit"));
-}
-
-async function submitReport(event) {
-  event.preventDefault();
-  if (state.reportSubmitting) return;
-  const note = $("report-note").value.trim();
-  if (note.length < 8) { $("report-status").textContent = "Please include a little more detail."; $("report-status").className = "report-status error"; return; }
-  state.reportSubmitting = true; $("report-submit").disabled = true;
-  $("report-status").textContent = "Sending diagnostics to command…"; $("report-status").className = "report-status";
-  let dataUrl = state.reportImageDataUrl, mimeType = state.reportImageMimeType;
-  if (!dataUrl && $("report-screenshot").checked && state.screen === "game") {
-    try { mimeType = "image/jpeg"; dataUrl = $("game-canvas").toDataURL(mimeType, .76); } catch { /* A report is still useful without a screenshot. */ }
-  }
-  const game = gameDiagnostics(), contact = $("report-contact").value.trim();
-  const payload = {
-    kind: "vellum.feedback", version: 1, project: "lastlight", capturedAt: new Date().toISOString(),
-    note: `[${$("report-category").value}] ${note}`,
-    reporter: { flow: "public-user", signedIn: false, userLabel: (contact || callsign()).slice(0, 180) },
-    url: reportLocation(),
-    diagnostics: {
-      app: "lastlight", build: BUILD, game,
-      route: { viewMode: state.screen, path: location.pathname, search: "", activeLocation: game.map || state.screen },
-      browser: { viewport: { width: innerWidth, height: innerHeight, devicePixelRatio }, userAgent: navigator.userAgent },
-    },
-    recentHistory: [
-      { type: "session", summary: `Build ${BUILD}; ${game.screen}; ${game.specialist}; ${game.map || "no map"}/${game.difficulty || "no tier"}; level ${game.level}; ${game.elapsedSeconds}s; ${game.multiplayerRole}` },
-      ...state.recentErrors,
-    ].slice(-8),
-    screenshot: { captured: Boolean(dataUrl), mimeType, dataUrl },
-  };
-  try {
-    const response = await fetch(FEEDBACK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok || !result.ok) throw new Error(result.error || `Report service returned ${response.status}`);
-    $("report-status").textContent = `Report sent${result.issue?.identifier ? ` as ${result.issue.identifier}` : ""}. Thank you.`;
-    $("report-status").className = "report-status success"; $("report-alert").classList.add("hidden"); clearReportNote(); clearReportImage(); sfx("reward");
-  } catch (error) {
-    console.error(error); $("report-status").textContent = "Could not send automatically. Use “Copy diagnostic details” and share them directly.";
-    $("report-status").className = "report-status error"; sfx("danger");
-  } finally { state.reportSubmitting = false; $("report-submit").disabled = false; }
-}
-
-async function copyDiagnostics() {
-  try { await navigator.clipboard.writeText(`${$("report-note").value.trim()}\n\n${diagnosticText()}`); toast("Diagnostic details copied"); }
-  catch { toast("Clipboard unavailable"); }
+  console.error(`[${type}]`, error);
 }
 
 function ensureAudio() {
@@ -4401,7 +4284,6 @@ function bindEvents() {
   $("pause-button").addEventListener("click", () => togglePause()); $("resume-button").addEventListener("click", () => togglePause(false)); $("abandon-button").addEventListener("click", abandon);
   $("network-state-return").addEventListener("click", leaveToHome);
   $("network-state-retry").addEventListener("click", retryRoomConnection);
-  $("network-state-report").addEventListener("click", openReport);
   $("network-state-overlay").addEventListener("keydown", trapAuthorityFocus);
   window.addEventListener("offline", () => {
     if (state.partyMode === "solo" || !["game", "result"].includes(state.screen)) return;
@@ -4485,16 +4367,8 @@ function bindEvents() {
   $("mastery-dialog").addEventListener("click", (event) => { if (event.target === $("mastery-dialog")) $("mastery-dialog").close(); });
   $("guide-close").addEventListener("click", () => $("guide-dialog").close());
   $("guide-dialog").addEventListener("click", (event) => { if (event.target === $("guide-dialog")) $("guide-dialog").close(); });
-  $("report-button").addEventListener("click", openReport); $("report-close").addEventListener("click", () => $("report-dialog").close());
-  $("report-dialog").addEventListener("click", (event) => { if (event.target === $("report-dialog")) $("report-dialog").close(); });
-  $("report-dialog").addEventListener("paste", pasteReportImage);
-  $("report-dialog").addEventListener("close", handleReportClosed);
-  $("report-form").addEventListener("keydown", handleReportSubmitShortcut);
-  $("report-form").addEventListener("submit", submitReport); $("report-copy").addEventListener("click", copyDiagnostics);
   window.addEventListener("lastlight:inspect", (event) => showInspectPanel(event.detail || {}));
   window.addEventListener("lastlight:inspect-clear", hideInspectPanel);
-  window.addEventListener("error", (event) => captureClientError("error", event.error || event.message));
-  window.addEventListener("unhandledrejection", (event) => captureClientError("unhandled promise", event.reason));
   window.addEventListener("gamepadconnected", (event) => { if (event.gamepad?.mapping === "standard") renderAccessibilityControls(`${event.gamepad.id || "Standard gamepad"} connected.`); });
   window.addEventListener("gamepaddisconnected", () => renderAccessibilityControls("Standard gamepad disconnected."));
   window.addEventListener("keydown", (event) => {
@@ -4528,13 +4402,6 @@ function bindEvents() {
     }
     if (!isTyping && !dialogOpen && action === "ping" && state.screen === 'game') {
       event.preventDefault(); if (!event.repeat) openPingWheel({ source: 'keyboard' }); return;
-    }
-    if (action === "report" && !isTyping && !dialogOpen) { event.preventDefault(); openReport(); return; }
-    if (isReportShortcut(event)) {
-      if (!shouldOpenReportShortcut(event, { isTyping, dialogOpen })) return;
-      event.preventDefault();
-      openReport();
-      return;
     }
     if (isTyping || dialogOpen || state.screen !== "game") return;
     if (action === "quickPause" && isInteractive) return;
@@ -4636,7 +4503,6 @@ if (localHost) Object.defineProperty(window, "__lastlightQA", { value: Object.fr
   },
   audioState: () => JSON.parse(JSON.stringify(audioDiagnostics())),
   testAudio: () => testAudioOutput(),
-  reportState: () => ({ screen: state.screen, open: $("report-dialog").open, paused: Boolean(state.sim?.paused), pauseReason: state.sim?.pauseReason || "", resumeAfterReport: state.resumeAfterReport }),
       beginUpgrade: () => { if (!state.sim || state.screen !== "game") return false; state.sim.beginUpgradeChoice(); state.lastUpgradeKey = ""; return true; },
       beginApex: (phase = 1) => {
         if (!state.sim || state.screen !== "game") return false;

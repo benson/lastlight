@@ -31,7 +31,7 @@ These are synthetic engineering measurements, not player-facing FPS claims. They
 
 ## Next measurement pass
 
-Add an opt-in F3 overlay and attach its aggregate summary to problem reports. Track frame/simulation/render/HUD p50, p95 and p99; current and maximum entity counts; rendered versus culled counts; and snapshot bytes for multiplayer.
+Add an opt-in F3 overlay and expose its aggregate summary in local QA diagnostics. Track frame/simulation/render/HUD p50, p95 and p99; current and maximum entity counts; rendered versus culled counts; and snapshot bytes for multiplayer.
 
 Use deterministic fixtures at the reported 1615×1060 viewport:
 

@@ -33,7 +33,8 @@ Verify the active value without sending credentials:
 Invoke-RestMethod -Uri https://lastlight-relay.bensonperry.workers.dev/config -Headers @{ Origin = "https://bensonperry.com" }
 ```
 
-Then use a fresh browser load and copy problem-report diagnostics. They include
+Then load a local preview on localhost and inspect
+`window.__lastlightQA.diagnostics()` in the browser console. It includes
 the active config version, gameplay version, source, load status, and flags.
 
 ## Emergency controls

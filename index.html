@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260718.9">
+  <link rel="stylesheet" href="styles.css?v=20260928.1">
 </head>
 <body>
   <main id="app">
@@ -68,7 +68,7 @@
           <span data-control-choices><kbd>1–3</kbd> Upgrade</span>
           <span data-control-ping data-control-action="ping"><kbd>G</kbd> Ping</span>
           <span data-control-action="pause"><kbd>Esc</kbd> Pause</span>
-          <span data-control-action="report"><kbd>` / ~</kbd> Report</span>
+
         </div>
       </details>
 
@@ -185,7 +185,7 @@
         <div class="lobby-brief" aria-label="Level reference">
           <section class="lobby-controls-panel" aria-label="Controls">
             <div class="control-ribbon lobby-controls" aria-label="Keyboard controls">
-              <span data-control-movement><kbd>WASD</kbd> Move</span><span><kbd>Mouse</kbd> Aim</span><span data-control-action="autoAim"><kbd>C</kbd> Signature aim</span><span data-control-action="active"><kbd>E</kbd> Ability</span><span data-control-action="ultimate"><kbd>R</kbd> Ultimate</span><span data-control-choices><kbd>1–3</kbd> Upgrade</span><span data-control-ping data-control-action="ping"><kbd>G</kbd> Ping</span><span data-control-action="quickPause"><kbd>Space</kbd> Quick Pause</span><span data-control-action="pause"><kbd>Esc</kbd> Menu</span><span data-control-action="report"><kbd>` / ~</kbd> Report</span>
+              <span data-control-movement><kbd>WASD</kbd> Move</span><span><kbd>Mouse</kbd> Aim</span><span data-control-action="autoAim"><kbd>C</kbd> Signature aim</span><span data-control-action="active"><kbd>E</kbd> Ability</span><span data-control-action="ultimate"><kbd>R</kbd> Ultimate</span><span data-control-choices><kbd>1–3</kbd> Upgrade</span><span data-control-ping data-control-action="ping"><kbd>G</kbd> Ping</span><span data-control-action="quickPause"><kbd>Space</kbd> Quick Pause</span><span data-control-action="pause"><kbd>Esc</kbd> Menu</span>
             </div>
           </section>
           <details id="lobby-rules-disclosure" class="reference-disclosure hidden">
@@ -342,7 +342,7 @@
       <div class="xp-wrap"><span id="level-label">LV 1</span><div class="xp-track"><i id="xp-progress"></i></div></div>
       <details class="game-controls-hint">
         <summary>Controls</summary>
-        <div aria-label="Keyboard controls"><span data-control-movement><kbd>WASD</kbd> Move</span><span data-control-action="autoAim"><kbd>C</kbd> Signature aim</span><span><kbd>Mouse</kbd> Aim</span><span data-control-ping data-control-action="ping"><kbd>G</kbd> Ping</span><span data-control-action="quickPause"><kbd>Space</kbd> Quick Pause + inspect</span><span><kbd>F3</kbd> FPS</span><span data-control-action="report"><kbd>` / ~</kbd> Report</span></div>
+        <div aria-label="Keyboard controls"><span data-control-movement><kbd>WASD</kbd> Move</span><span data-control-action="autoAim"><kbd>C</kbd> Signature aim</span><span><kbd>Mouse</kbd> Aim</span><span data-control-ping data-control-action="ping"><kbd>G</kbd> Ping</span><span data-control-action="quickPause"><kbd>Space</kbd> Quick Pause + inspect</span><span><kbd>F3</kbd> FPS</span></div>
       </details>
       <aside id="inspect-panel" class="inspect-panel hidden" role="tooltip" aria-live="polite">
         <span id="inspect-kind">Field object</span>
@@ -507,7 +507,6 @@
         <div class="network-state-steps" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="network-state-actions">
           <button id="network-state-retry" class="secondary-button hidden" type="button">Retry now</button>
-          <button id="network-state-report" class="secondary-button" type="button">Report problem</button>
           <button id="network-state-return" class="deploy-button" type="button"><span>Leave run</span><span>Safe exit</span></button>
         </div>
       </div>
@@ -574,7 +573,7 @@
         <section><span class="manual-number">03</span><h3>Hold for the apex</h3><p>Enemy tiers and wave density rise throughout the operation. Survive the timer, then defeat the map's apex before its five-minute enrage.</p></section>
         <section><span class="manual-number">04</span><h3>Stay active when downed</h3><p>In co-op, crawl toward safety, press E to shield a nearby standing ally, and use G to call for help. A squadmate inside your ring completes the rescue in three seconds.</p></section>
       </div>
-          <div class="manual-controls"><span data-control-movement><kbd>WASD</kbd> Move</span><span><kbd>Mouse</kbd> Aim</span><span data-control-action="autoAim"><kbd>C</kbd> Signature aim</span><span data-control-action="active"><kbd>E</kbd> Ability</span><span data-control-action="ultimate"><kbd>R</kbd> Ultimate</span><span data-control-choices><kbd>1–3</kbd> Upgrade</span><span data-control-action="quickPause"><kbd>Space</kbd> Quick Pause</span><span data-control-action="pause"><kbd>Esc</kbd> Menu</span><span data-control-action="report"><kbd>` / ~</kbd> Report</span></div>
+          <div class="manual-controls"><span data-control-movement><kbd>WASD</kbd> Move</span><span><kbd>Mouse</kbd> Aim</span><span data-control-action="autoAim"><kbd>C</kbd> Signature aim</span><span data-control-action="active"><kbd>E</kbd> Ability</span><span data-control-action="ultimate"><kbd>R</kbd> Ultimate</span><span data-control-choices><kbd>1–3</kbd> Upgrade</span><span data-control-action="quickPause"><kbd>Space</kbd> Quick Pause</span><span data-control-action="pause"><kbd>Esc</kbd> Menu</span></div>
     </dialog>
 
     <dialog id="practice-dialog" class="guide-dialog practice-dialog" aria-labelledby="practice-title">
@@ -679,30 +678,6 @@
       </form>
     </dialog>
 
-    <dialog id="report-dialog" class="report-dialog">
-      <form id="report-form">
-        <div class="manual-header">
-          <div><p class="eyebrow">Direct to command // diagnostics attached</p><h2>REPORT A PROBLEM</h2></div>
-          <button id="report-close" class="icon-button" type="button" aria-label="Close problem report">Close</button>
-        </div>
-        <div class="report-body">
-          <p>Tell us what happened. Your build, browser, current screen, run settings, and recent errors will be included automatically.</p>
-          <div class="report-fields">
-            <label class="select-field"><span class="input-label">Report type</span><select id="report-category"><option value="bug">Something broke</option><option value="balance">Balance / difficulty</option><option value="multiplayer">Multiplayer</option><option value="feedback">Idea or feedback</option></select></label>
-            <label class="callsign-field"><span class="input-label">Contact (optional)</span><input id="report-contact" type="text" maxlength="120" autocomplete="email" placeholder="Email or handle"></label>
-            <label class="report-note"><span class="input-label">What happened?</span><textarea id="report-note" minlength="8" maxlength="4000" required placeholder="What were you doing, what did you expect, and what happened instead?"></textarea></label>
-          </div>
-          <div class="report-attachments">
-            <label class="report-screenshot"><input id="report-screenshot" type="checkbox" checked><span>Include the live game canvas automatically during a run</span></label>
-            <p id="report-image-status"><strong>Paste a screenshot</strong> anywhere while this form is open. It will attach automatically.</p>
-          </div>
-          <div id="report-context" class="report-context"></div>
-          <div id="report-status" class="report-status" role="status" aria-live="polite"></div>
-          <div class="report-actions"><button id="report-submit" class="deploy-button" type="submit" aria-keyshortcuts="Shift+Enter" title="Send report (Shift+Enter)"><span>Send report</span><span>↗</span></button><button id="report-copy" class="text-button" type="button">Copy diagnostic details</button></div>
-        </div>
-      </form>
-    </dialog>
-
     <dialog id="build-history-dialog" class="build-history-dialog" aria-labelledby="build-history-title">
       <div class="build-history-header">
         <div>
@@ -789,7 +764,7 @@
             <ul>
               <li>Made manual facing follow the cursor and auto-aim facing follow movement, with dash travel taking temporary priority.</li>
               <li>Moved the +10 gold reward to level-up itself so choosing an upgrade never grants a second bonus.</li>
-              <li>Fixed the undefined-key run crash and made problem reporting practical on compact mobile screens.</li>
+              <li>Fixed the undefined-key run crash.</li>
               <li>Removed mobile Damage Sources, terrain dimensions, the constant player ring, and redundant Freight Grid direction text.</li>
               <li>Preloaded a much smaller home-screen image while keeping the original artwork and composition.</li>
             </ul>
@@ -851,7 +826,7 @@
           <ul>
             <li>Made each operation’s four major environment structures solid cover that blocks specialists, enemies, and ordinary shots.</li>
             <li>Added local directional warnings whenever Freight Grid or another map mechanic is about to move the player.</li>
-            <li>Added forced-movement context to problem reports and kept collision identical across every display-quality setting.</li>
+            <li>Kept collision identical across every display-quality setting.</li>
           </ul>
         </article>
         <article class="build-release">
@@ -883,7 +858,7 @@
             <li>Made all nine specialist portraits, mastery levels, progress, and current challenge states visible directly on the home screen.</li>
             <li>Kept the full mastery browser available from every roster card without hiding the useful progress overview behind navigation.</li>
             <li>Rebuilt lobby controls as a stable, always-visible full-width ribbon and stopped the selected-specialist art from collapsing on shorter layouts.</li>
-            <li>Grouped Build and Report a problem into one clean utility rail on the right edge.</li>
+            <li>Placed build information on the right edge.</li>
           </ul>
         </article>
         <article class="build-release">
@@ -1054,7 +1029,6 @@
             <li>Added relay-owned, deterministic mid-run reinforcement and reconnect admission with stable replay slots, safe spawn placement, catch-up ranks, and three selectable deployment packages.</li>
             <li>Carried reinforcement identity through replay, recovery, host migration, telemetry, and fair campaign-clear eligibility behind an independent rollback flag.</li>
             <li>Rebuilt the post-operation debrief around a 12px type floor, responsive contribution cards, compact damage sources, and overflow-free desktop and mobile layouts.</li>
-            <li>Made report screenshots clipboard-first: paste an image anywhere while the feedback form is open to attach it automatically, with ordinary text paste unchanged.</li>
           </ul>
         </article>
         <article class="build-release">
@@ -1114,7 +1088,7 @@
           <ul>
             <li>Added persistent replay-slot squad states for reconnecting, restored, and departed specialists, including tick-matched three-minute seat reservations.</li>
             <li>Kept reconnecting clients frozen through transport recovery until a current authoritative snapshot or exact run sync arrives.</li>
-            <li>Added mobile-visible status pills, one-shot accessible announcements, explicit retry/offline progress, safe exit/report actions, and reason-specific terminal recovery copy.</li>
+            <li>Added mobile-visible status pills, one-shot accessible announcements, explicit retry/offline progress, safe exit actions, and reason-specific terminal recovery copy.</li>
           </ul>
         </article>
         <article class="build-release">
@@ -1357,7 +1331,7 @@
             <li>Added a deterministic localhost-only adverse-network lab with latency, jitter, loss, duplication, reordering, and forced-reconnect profiles.</li>
             <li>Added a four-replica multiplayer soak gate covering upgrades, objectives, disconnect/reconnect, apex completion, convergence hashes, and structural budgets.</li>
             <li>Added privacy-safe local crash and refresh recovery with anonymous exact simulation state, replay continuation, compatibility checks, and an explicit Resume or Discard choice.</li>
-            <li>Made restored operations resume paused, clear recovery after results or abandonment, and keep callsigns, rooms, relay IDs, reconnect tokens, and report contact out of storage.</li>
+            <li>Made restored operations resume paused, clear recovery after results or abandonment, and keep callsigns, rooms, relay IDs, reconnect tokens, out of storage.</li>
           </ul>
         </article>
         <article class="build-release">
@@ -1435,7 +1409,6 @@
             <li>Added mid-operation squad joining and three-minute callsign reconnection with loadout and run-stat restoration.</li>
             <li>Added starting-weapon context to specialist select and clear evolution-pair callouts during upgrade choices.</li>
             <li>Made teammate upgrade cards fully inspectable and increased the legibility of the in-run HUD.</li>
-            <li>Moved problem reporting away from game and lobby content.</li>
           </ul>
         </article>
         <article class="build-release">
@@ -1460,7 +1433,7 @@
             <li>Moved specialist selection entirely into the squad lobby and kept callsign/deployment panels anchored while switching modes.</li>
             <li>Added real weapon art to upgrade choices, persistent passive loadouts, radial cooldown timers, and a richer in-run field guide.</li>
             <li>Made Yuum.AI a visible flying companion that attacks, gathers data, and drops repairs; cursor-directed dashes now stay predictable with auto-aim.</li>
-            <li>Added Shift inspection for enemies and field objects, a health-bar preference, and clean-slate problem reports with performance context.</li>
+            <li>Added Shift inspection for enemies and field objects, a health-bar preference, and performance context.</li>
             <li>Redesigned supply caches as unmistakable shoot-to-open props and substantially reduced busy-wave render work through culling and effect budgets.</li>
           </ul>
         </article>
@@ -1473,7 +1446,6 @@
             <li>Illustrated every rare find, event, squad boon, and augment in the Upgrade Archive.</li>
             <li>Made combat pickups, hostile fire, and battlefield obstacles easier to distinguish at a glance.</li>
             <li>Separated callsign and specialist selection from solo and squad deployment choices.</li>
-            <li>Added the <kbd>` / ~</kbd> in-run report shortcut, with safe pausing while a report is open.</li>
             <li>Tuned the opening threat curve and added privacy-conscious run telemetry for future balance decisions.</li>
             <li>Improved specialist framing, interface selection behavior, share previews, branding assets, and theme-ready asset organization.</li>
           </ul>
@@ -1485,7 +1457,7 @@
           </header>
           <ul>
             <li>Expanded campaign progression, squad upgrade visibility, game events, combat feedback, and post-run statistics.</li>
-            <li>Added persistent build identification, weapon art and tooltips, audio, the Upgrade Archive, and problem reporting.</li>
+            <li>Added persistent build identification, weapon art and tooltips, audio, and the Upgrade Archive.</li>
           </ul>
         </article>
       </div>
@@ -1494,11 +1466,10 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </main>
 
-  <aside class="edge-utilities" aria-label="Build and feedback">
+  <aside class="edge-utilities" aria-label="Build information">
     <button id="build-history-button" class="build-badge" type="button" aria-label="Lastlight build 2026.07.18.9. View build history" aria-haspopup="dialog" aria-controls="build-history-dialog"><span></span> BUILD <strong>2026.07.18.9</strong></button>
-    <button id="report-button" class="report-button" type="button"><span id="report-alert" class="hidden">!</span> Report a problem</button>
   </aside>
   <script src="build-history.js?v=20260712.1"></script>
-  <script type="module" src="game.js?v=20260718.9"></script>
+  <script type="module" src="game.js?v=20260928.1"></script>
 </body>
 </html>

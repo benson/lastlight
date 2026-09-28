@@ -23,7 +23,7 @@ test("host migration separates assertive transitions from polite progress", () =
 });
 
 test("terminal and recoverable network actions are explicit and touch sized", () => {
-  for (const id of ["network-state-retry", "network-state-report", "network-state-return"]) assert.match(html, new RegExp(`id="${id}"`));
+  for (const id of ["network-state-retry", "network-state-return"]) assert.match(html, new RegExp(`id="${id}"`));
   assert.match(css, /\.network-state-actions button \{[^}]+min-height: 44px;/s);
   assert.match(game, /requestAnimationFrame\(\(\) => \$\("network-state-return"\)\.focus\(\)\)/);
 });
@@ -34,7 +34,7 @@ test("the modal freezes background navigation and returns focus after authority 
   assert.match(html, /class="network-state-card" tabindex="-1"/);
   assert.match(game, /if \(visible && !state\.authorityPreviousFocus\) state\.authorityPreviousFocus = document\.activeElement/);
   assert.match(game, /for \(const \[name, screen\] of Object\.entries\(screens\)\) \{[\s\S]+?screen\.inert = blocked;/);
-  assert.match(game, /for \(const id of \["report-button", "build-history-button"\]\) \$\(id\)\.inert = visible/);
+  assert.match(game, /\$\("build-history-button"\)\.inert = visible/);
   assert.match(game, /function trapAuthorityFocus\(event\) \{[\s\S]+?document\.activeElement === last[\s\S]+?first\.focus\(\)/);
   assert.match(game, /\$\("network-state-overlay"\)\.addEventListener\("keydown", trapAuthorityFocus\)/);
   assert.match(game, /visible && next !== previous[\s\S]+?\.network-state-card"\)\.focus\(\)/);

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const RELEASE = "20260718.9";
+const updatedTargets = new Set(["styles.css", "game.js", "hotkeys.js", "accessibility-settings.js"]);
 const importers = [
   "index.html", "game.js", "engine.js", "render.js", "replay-timeline.js",
   "replay-game-adapters.js", "specialist-identity.js", "host-migration.js",
@@ -37,7 +38,7 @@ test("the active build cache-busts every changed module through the transitive b
       const [, target, version] = match;
       if (!changedTargets.has(target)) continue;
       seen.add(target);
-      assert.equal(version, RELEASE, `${importer} uses a stale cache key for ${target}`);
+      assert.equal(version, updatedTargets.has(target) ? "20260928.1" : RELEASE, `${importer} uses a stale cache key for ${target}`);
     }
   }
   assert.deepEqual([...seen].sort(), [...changedTargets].sort());
